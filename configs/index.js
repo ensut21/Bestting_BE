@@ -5,13 +5,14 @@ module.exports = {
   isProduction: process.env.NODE_ENV === 'production',
   apiVersion: process.env.API_VERSION || 1,
   secret: process.env.NODE_ENV === 'production' ? process.env.SECRET : 'my-secret',
-  postgres: {
-    host: process.env.POSTGRES_HOST,
-    port: process.env.POSTGRES_PORT,
-    dbName:  process.env.POSTGRES_DB_NAME,
+  mongo: {
+    content_type: process.env.MONGO_CONTENT_TYPE,
+    host: process.env.MONGO_HOST,
+    port: process.env.MONGO_PORT,
+    dbName:  process.env.MONGO_DB_NAME,
     options: {
-      user: process.env.POSTGRES_USER,
-      pass: process.env.POSTGRES_PASS
+      user: process.env.MONGO_USER,
+      pass: process.env.MONGO_PASS
     }
   },
   tokenType: process.env.TOKEN_TYPE,

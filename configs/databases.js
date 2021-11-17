@@ -1,21 +1,12 @@
-const { Sequelize } = require('sequelize');
+const mongoose = require('mongoose');
 const config = require('../configs');
 
 const databases = {
-    get postgresql() {
-        const sequelize = new Sequelize(
-            config.postgres.dbName,
-            config.postgres.options.user,
-            config.postgres.options.pass,
-            {
-                host: config.postgres.host,
-                port: config.postgres.port,
-                dialect: 'postgres'
-            }
+    async mongodb() {
+        await mongoose.connect(
+            `${config.mongo.content_type}://${config.mongo.host}/${config.mongo.dbName}`
         );
-
-        return sequelize;
     }
 };
 
-module.exports = { Sequelize, ...databases }; 
+module.exports = { ...databases }; 

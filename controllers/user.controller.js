@@ -10,70 +10,46 @@ const methods = {
 
   async onGetById(req, res, next) {
     try {
-    } catch (error) { }
+
+      const { id } = req.params;
+
+      const result = await Service.findById(id);
+
+      return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
   },
 
   async onInsert(req, res, next) {
     try {
-    } catch (error) { }
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        throw ErrorForbidden('Missing or invalid parameter');
+      }
+
+      const result = await Service.create({
+        ...req.body,
+        color_code: `#${((1<<24)*Math.random() | 0).toString(16)}`
+      });
+
+      return res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
   },
 
   async onUpdate(req, res, next) {
     try {
-    } catch (error) { }
+
+    } catch (error) {
+      
+    }
   },
 
   async onDelete(req, res, next) {
     try {
     } catch (error) { }
-  },
-
-  async onRegisterByEmail(req, res, next) {
-    try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        throw ErrorForbidden('Missing or invalid parameter');
-      }
-      const result = Service.create(req.body);
-      return res.status(200).send(result);
-    } catch (error) {
-      next(error);
-    }
-  },
-
-  async onLoginByEmail(req, res, next) {
-    try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        throw ErrorForbidden('Missing or invalid parameter');
-      }
-      const result = await Service.loginByEmail(req.body);
-      return res.status(200).send(result);
-    } catch (error) {
-      next(error);
-    }
-  },
-
-  async onLoginByGoogle(req, res, next) {
-    try {
-    } catch (error) { }
-  },
-
-  async onLoginByFacebook(req, res, next) {
-    try {
-    } catch (error) { }
-  },
-
-  async onRefreshToken(req, res, next) {
-    try {
-      if (!req.headers.authorization) {
-        throw ErrorForbidden('Missing or invalid parameter');
-      }
-      const result = await Service.refreshToken(req.headers.authorization.split(' ')[1]);
-      return res.status(200).send(result);
-    } catch (error) {
-      next(error);
-    }
   },
 };
 

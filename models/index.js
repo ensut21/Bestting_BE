@@ -1,10 +1,5 @@
-const { Sequelize, postgresql } = require('../configs/databases');
+const { mongodb } = require("../configs/databases");
 
-postgresql.authenticate();
-postgresql.sync();
+mongodb();
 
-module.exports = {
-  Sequelize,
-  postgresql,
-  users: require('./schema/users')(postgresql, Sequelize),
-};
+require("./schema/users");

@@ -1,10 +1,12 @@
-var express = require('express');
+var express = require("express");
 var app = express();
-var morgan = require('morgan');
+var morgan = require("morgan");
 
-const { returnError } = require('./helpers/error.helper')
+require("./models")
 
-app.use(morgan('dev'));
+const { returnError } = require("./helpers/error.helper");
+
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
