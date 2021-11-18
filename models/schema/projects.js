@@ -3,14 +3,15 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
 const schema = new Schema({
-  first_name: String,
-  last_name: String,
-  color_code: String,
-  profile_images: [{ type: ObjectId, ref: 'Files' }],
-  teams: [{ type: ObjectId, ref: 'Teams' }],
+  code: String,
+  name: String,
+  team_id: { type: ObjectId, ref: "Teams" },
+  members: [{ type: ObjectId, ref: "Users" }],
+  boards: [{ type: ObjectId, ref: "Boards" }],
+  created_by: { type: ObjectId, ref: "Users" },
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: null },
   terminated_at: { type: Date, default: null },
 });
 
-mongoose.model("Users", schema);
+mongoose.model("Projects", schema);

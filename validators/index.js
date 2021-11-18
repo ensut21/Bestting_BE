@@ -2,9 +2,11 @@ const { validationResult } = require('express-validator');
 
 // Import Validators
 const user = require('./user');
+const team = require('./team');
 
 const validators = {
   user,
+  team
 };
 
 module.exports = {
