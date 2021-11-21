@@ -5,7 +5,7 @@ const Roles = mongoose.model("Roles");
 const Permissions = mongoose.model("Permissions");
 
 const conn = require("../models");
-const { ErrorNotFound } = require("../configs/errorMetods");
+const { ErrorNotFound, ErrorForbidden } = require("../configs/errorMetods");
 
 const methods = {
   createTeam(data) {
@@ -72,7 +72,11 @@ const methods = {
 
         const permissionQuery = members.map((t) => ({
           updateOne: {
-            filter: { user_id: t.user_id, team_id: teamId },
+            filter: {
+              user_id: t.user_id,
+              team_id: teamId,
+              project_id: { $exists: false },
+            },
             update: {
               user_id: t.user_id,
               team_id: teamId,
@@ -89,7 +93,7 @@ const methods = {
 
         const team = await Teams.findByIdAndUpdate(
           teamId,
-          { $addToSet: { members: userIdList } },
+          { $addToSet: { members: userIdList }, updated_at: Date.now() },
           { session, new: true }
         );
 
@@ -97,11 +101,63 @@ const methods = {
 
         await Users.updateMany(
           { _id: { $in: userIdList } },
-          { $addToSet: { teams: team._id } },
+          { $addToSet: { teams: team._id }, updated_at: Date.now() },
           { session }
         ).populate({ path: "teams", select: "name code" });
 
         await session.commitTransaction();
+        resolve(team);
+      } catch (error) {
+        await session.abortTransaction();
+        reject(error);
+      } finally {
+        session.endSession();
+      }
+    });
+  },
+  removeTeamMember(teamId, userId) {
+    return new Promise(async (resolve, reject) => {
+      const session = await conn.startSession();
+      try {
+        session.startTransaction();
+
+        const user = await Users.findByIdAndUpdate(
+          userId,
+          { $pull: { teams: teamId }, updated_at: Date.now() },
+          { session }
+        );
+
+        const permission = await Permissions.findOneAndUpdate(
+          {
+            user_id: userId,
+            team_id: teamId,
+            project_id: { $exists: false },
+            terminated_at: null,
+          },
+          {
+            updated_at: Date.now(),
+            terminated_at: Date.now(),
+          },
+          {
+            session,
+          }
+        );
+
+        if (!permission) throw ErrorNotFound("User is not on this team.");
+
+        const team = await Teams.findByIdAndUpdate(
+          teamId,
+          { $pull: { members: userId }, updated_at: Date.now() },
+          { session, new: true }
+        ).populate({
+          path: "members",
+          select: "first_name last_name color_code profile_images",
+        });
+
+        if (user._id.toString() === team.created_by.toString())  throw ErrorForbidden("Permission denied.");
+
+        await session.commitTransaction();
+
         resolve(team);
       } catch (error) {
         await session.abortTransaction();

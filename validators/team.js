@@ -6,8 +6,8 @@ module.exports = {
     check("name").notEmpty().withMessage("is empty"),
   ],
   addTeamMembers: [
-    body().isArray(),
-    check("members.*.user_id").notEmpty().withMessage("is empty"),
-    check("members.*.role").notEmpty().withMessage("is empty"),
+    body().isArray().notEmpty(),
+    body("*.user_id").exists().isMongoId(),
+    body("*.role_id").exists().isMongoId(),
   ],
 };

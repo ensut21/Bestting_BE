@@ -25,7 +25,7 @@ const methods = {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        throw ErrorForbidden(errors);
+        throw ErrorForbidden({ errors: errors.array() });
       }
 
       const { teamId } = req.params;
@@ -37,7 +37,18 @@ const methods = {
       const response = Success(result);
       return res.status(response.statusCode).json(response);
     } catch (error) {
-      console.log(error)
+      next(error);
+    }
+  },
+  async onRemoveTeamMembers(req, res, next) {
+    try {
+      const { teamId, userId } = req.params;
+
+      const result = await Service.removeTeamMember(teamId ,userId);
+
+      const response = Success(result);
+      return res.status(response.statusCode).json(response);
+    } catch (error) {
       next(error);
     }
   }
