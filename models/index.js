@@ -5,6 +5,8 @@ mongodb();
 
 require("./schema/users");
 require("./schema/teams");
+require("./schema/roles");
+require("./schema/permissions");
 
 const conn = mongoose.connection;
 
