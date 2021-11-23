@@ -12,7 +12,7 @@ const methods = {
           .sort(sort);
         resolve(users);
       } catch (error) {
-        reject(error.message || error);
+        reject(error);
       }
     });
   },
@@ -22,7 +22,7 @@ const methods = {
         const user = await Users.create(data);
         resolve(user);
       } catch (error) {
-        reject(error.message || error);
+        reject(error);
       }
     });
   },
@@ -32,7 +32,7 @@ const methods = {
         const user = await Users.findById(id);
         resolve(user);
       } catch (error) {
-        reject(error.message || error);
+        reject(error);
       }
     });
   },
@@ -48,7 +48,7 @@ const methods = {
         );
         resolve(user);
       } catch (error) {
-        reject(error.message || error);
+        reject(error);
       }
     });
   },

@@ -198,6 +198,7 @@ describe("Feature team api", function () {
         .expect("Content-Type", /json/)
         .expect(404)
         .then((response) => {
+          console.log(response.body)
           expect(response.body.errorMessage).toEqual("Team not found.");
         });
     });
