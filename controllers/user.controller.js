@@ -12,7 +12,7 @@ const {
 const methods = {
   async onGetAll(req, res, next) {
     try {
-      const result = await Service.findAll(req.query);
+      const result = await Service.getUserAll(req.query);
 
       const response = Success(result);
       return res.status(response.statusCode).json(response);
@@ -26,7 +26,7 @@ const methods = {
     try {
       const { id } = req.params;
 
-      const result = await Service.findById(id);
+      const result = await Service.getUserById(id);
 
       const response = Success(result);
       return res.status(response.statusCode).json(response);
@@ -35,14 +35,14 @@ const methods = {
     }
   },
 
-  async onInsert(req, res, next) {
+  async onCreate(req, res, next) {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        throw ErrorForbidden("Missing or invalid parameter");
+        throw ErrorForbidden(errors.array());
       }
 
-      const result = await Service.create({
+      const result = await Service.createUser({
         ...req.body,
         color_code: `#${(((1 << 24) * Math.random()) | 0).toString(16)}`,
       });
@@ -58,7 +58,7 @@ const methods = {
     try {
       const { id } = req.params;
 
-      const result = await Service.update(id, {
+      const result = await Service.updateUser(id, {
         ...req.body,
         updated_at: Date.now(),
       });
@@ -74,7 +74,7 @@ const methods = {
     try {
       const { id } = req.params;
 
-      await Service.update(id, {
+      await Service.updateUser(id, {
         updated_at: Date.now(),
         terminated_at: Date.now(),
       });

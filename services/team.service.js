@@ -16,7 +16,7 @@ const methods = {
 
         resolve(team);
       } catch (error) {
-        reject(error);
+        reject(error.message || error);
       }
     });
   },
@@ -70,7 +70,7 @@ const methods = {
         });
       } catch (error) {
         await session.abortTransaction();
-        reject(error);
+        reject(error.message || error);
       } finally {
         session.endSession();
       }
@@ -90,7 +90,7 @@ const methods = {
         // delete sub feature in team.
         resolve(team);
       } catch (error) {
-        reject(error);
+        reject(error.message || error);
       }
     });
   },
@@ -139,7 +139,7 @@ const methods = {
         resolve(team);
       } catch (error) {
         await session.abortTransaction();
-        reject(error);
+        reject(error.message || error);
       } finally {
         session.endSession();
       }
@@ -192,7 +192,7 @@ const methods = {
         resolve(team);
       } catch (error) {
         await session.abortTransaction();
-        reject(error);
+        reject(error.message || error);
       } finally {
         session.endSession();
       }

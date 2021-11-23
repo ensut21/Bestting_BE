@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Users = mongoose.model("Users");
 
 const methods = {
-  findAll(query) {
+  getUserAll(query) {
     const { limit, skip, sort } = query;
     return new Promise(async (resolve, reject) => {
       try {
@@ -12,31 +12,31 @@ const methods = {
           .sort(sort);
         resolve(users);
       } catch (error) {
-        reject(error);
+        reject(error.message || error);
       }
     });
   },
-  create(data) {
+  createUser(data) {
     return new Promise(async (resolve, reject) => {
       try {
         const user = await Users.create(data);
         resolve(user);
       } catch (error) {
-        reject(error);
+        reject(error.message || error);
       }
     });
   },
-  findById(id) {
+  getUserById(id) {
     return new Promise(async (resolve, reject) => {
       try {
         const user = await Users.findById(id);
         resolve(user);
       } catch (error) {
-        reject(error);
+        reject(error.message || error);
       }
     });
   },
-  update(id, data) {
+  updateUser(id, data) {
     return new Promise(async (resolve, reject) => {
       try {
         const user = await Users.findByIdAndUpdate(
@@ -48,7 +48,7 @@ const methods = {
         );
         resolve(user);
       } catch (error) {
-        reject(error);
+        reject(error.message || error);
       }
     });
   },

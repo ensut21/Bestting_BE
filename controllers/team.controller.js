@@ -5,7 +5,7 @@ const { ErrorForbidden } = require("../configs/errorMetods");
 const { Success } = require("../configs/successMethods");
 
 const methods = {
-  async onGetTeamById(req, res, next) {
+  async onGetById(req, res, next) {
     try {
       const { teamId } = req.params;
 
@@ -17,7 +17,7 @@ const methods = {
       next(error);
     }
   },
-  async onCreateTeam(req, res, next) {
+  async onCreate(req, res, next) {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -31,7 +31,7 @@ const methods = {
       next(error);
     }
   },
-  async onDeleteTeam(req, res, next) {
+  async onDelete(req, res, next) {
     try {
       const { teamId } = req.params;
     
@@ -47,7 +47,7 @@ const methods = {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        throw ErrorForbidden({ errors: errors.array() });
+        throw ErrorForbidden(errors.array());
       }
 
       const { teamId } = req.params;

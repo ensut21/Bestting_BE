@@ -20,6 +20,6 @@ app.use(function (req, res, next) {
   res.status(404).json(ErrorNotFound('Unkonw Url.'));
 });
 
-// app.listen(3001, () => console.log("server started"));
+app.listen(3000, () => console.log("server started"));
 
 module.exports = app;

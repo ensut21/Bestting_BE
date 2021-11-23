@@ -4,7 +4,7 @@ const validators = require('../../validators');
 
 router.get('/', controllers.onGetAll);
 router.get('/:id', controllers.onGetById);
-router.post('/', validators.user.createUser, controllers.onInsert);
+router.post('/', validators.user.createUser, controllers.onCreate);
 router.patch('/:id', controllers.onUpdate)
 
 module.exports = router;
