@@ -8,6 +8,18 @@ const conn = require("../models");
 const { ErrorNotFound, ErrorForbidden } = require("../configs/errorMetods");
 
 const methods = {
+  getTeamById(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        // check user in this team
+        const team = Teams.findById(id);
+
+        resolve(team);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  },
   createTeam(data) {
     return new Promise(async (resolve, reject) => {
       const session = await conn.startSession();
@@ -61,6 +73,24 @@ const methods = {
         reject(error);
       } finally {
         session.endSession();
+      }
+    });
+  },
+  deleteTeam(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const team = await Teams.findByIdAndUpdate(
+          id,
+          {
+            terminated_at: Date.now(),
+          },
+          { new: true }
+        );
+
+        // delete sub feature in team.
+        resolve(team);
+      } catch (error) {
+        reject(error);
       }
     });
   },
@@ -154,7 +184,8 @@ const methods = {
           select: "first_name last_name color_code profile_images",
         });
 
-        if (user._id.toString() === team.created_by.toString())  throw ErrorForbidden("Permission denied.");
+        if (user._id.toString() === team.created_by.toString())
+          throw ErrorForbidden("Permission denied.");
 
         await session.commitTransaction();
 

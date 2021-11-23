@@ -18,6 +18,33 @@ describe("Feature team api", function () {
     await Permissions.remove();
   });
 
+  describe("Get team by id /teams/:id", function () {
+    let user;
+    let team;
+
+    beforeAll(async () => {
+      user = await Users.create({
+        first_name: randomSixDigit(),
+        last_name: randomSixDigit(),
+      });
+
+      team = await createTeam({
+        user_id: user._id,
+        name: randomSixDigit(),
+      });
+    });
+
+    it("it should get team success", async () => {
+      return request(app)
+        .get(`/api/v1/teams/${team._id}`)
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .then(async (response) => {
+          // expect(response.body.data.permission).toBeTruthy();
+        });
+    });
+  });
+
   describe("Create team /teams", function () {
     let user;
 
@@ -56,6 +83,33 @@ describe("Feature team api", function () {
         .post("/api/v1/teams")
         .expect("Content-Type", /json/)
         .expect(403);
+    });
+  });
+
+  describe("Delete team /teams/:teamId", function () {
+    let user;
+    let team;
+
+    beforeAll(async () => {
+      user = await Users.create({
+        first_name: randomSixDigit(),
+        last_name: randomSixDigit(),
+      });
+
+      team = await createTeam({
+        user_id: user._id,
+        name: randomSixDigit(),
+      });
+    });
+
+    it("it should delete team case success", async () => {
+      return request(app)
+        .delete(`/api/v1/teams/${team._id}`)
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .then(async (response) => {
+          expect(response.body.data.terminated_at).not.toEqual(null);
+        });
     });
   });
 
@@ -202,7 +256,9 @@ describe("Feature team api", function () {
         .expect("Content-Type", /json/)
         .expect(404)
         .then(async (response) => {
-          expect(response.body.errorMessage).toEqual("User is not on this team.");
+          expect(response.body.errorMessage).toEqual(
+            "User is not on this team."
+          );
         });
     });
 
