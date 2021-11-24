@@ -3,14 +3,14 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
 const schema = new Schema({
-  first_name: String,
-  last_name: String,
-  color_code: String,
-  profile_images: [{ type: ObjectId, ref: 'Files' }],
-  teams: [{ type: ObjectId, ref: 'Teams' }],
+  user_id: { type: ObjectId, ref: "Users" },
+  team_id: { type: ObjectId, ref: "Teams" },
+  project_id: { type: ObjectId, ref: "Projects" },
+  role_id: { type: ObjectId, ref: "Roles" },
+  cmd: { type: String, default: "CRUD" },
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: null },
   terminated_at: { type: Date, default: null },
 });
 
-mongoose.model("Users", schema);
+mongoose.model("Permissions", schema);
