@@ -140,7 +140,6 @@ const methods = {
       } catch (error) {
         await session.abortTransaction();
         reject(error);
-
       } finally {
         session.endSession();
       }

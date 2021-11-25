@@ -1,7 +1,7 @@
 const request = require("supertest");
 const app = require("../index");
 const mongoose = require("mongoose");
-// medel
+// model
 const Users = mongoose.model("Users");
 const Teams = mongoose.model("Teams");
 const Permissions = mongoose.model("Permissions");
@@ -63,7 +63,7 @@ describe("Feature team api", function () {
           name: randomSixDigit(),
         })
         .expect("Content-Type", /json/)
-        .expect(200)
+        .expect(201)
         .then(async (response) => {
           const userUpdated = await Users.findById(user._id);
           expect(userUpdated).toBeTruthy();

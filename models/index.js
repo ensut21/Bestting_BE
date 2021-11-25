@@ -5,6 +5,7 @@ mongodb();
 
 require("./schema/users");
 require("./schema/teams");
+require("./schema/projects");
 require("./schema/roles");
 require("./schema/permissions");
 
