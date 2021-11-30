@@ -1,7 +1,7 @@
 const request = require("supertest");
 const app = require("../index");
 const mongoose = require("mongoose");
-// medel
+// model
 const Users = mongoose.model("Users");
 const Teams = mongoose.model("Teams");
 const Permissions = mongoose.model("Permissions");
@@ -12,12 +12,6 @@ const { createTeam, addTeamMembers } = require("../services/team.service");
 const { randomSixDigit } = require("../utils/common");
 
 describe("Feature team api", function () {
-  afterAll(async () => {
-    await Users.remove();
-    await Teams.remove();
-    await Permissions.remove();
-  });
-
   describe("Get team by id /teams/:id", function () {
     let user;
     let team;
@@ -63,7 +57,7 @@ describe("Feature team api", function () {
           name: randomSixDigit(),
         })
         .expect("Content-Type", /json/)
-        .expect(200)
+        .expect(201)
         .then(async (response) => {
           const userUpdated = await Users.findById(user._id);
           expect(userUpdated).toBeTruthy();
@@ -198,7 +192,6 @@ describe("Feature team api", function () {
         .expect("Content-Type", /json/)
         .expect(404)
         .then((response) => {
-          console.log(response.body)
           expect(response.body.errorMessage).toEqual("Team not found.");
         });
     });

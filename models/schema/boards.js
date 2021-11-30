@@ -7,6 +7,7 @@ const SchemaTypes = Schema.Types;
 const schema = new Schema({
   name: String,
   code: String,
+  project_id: { type: ObjectId, ref: "Projects" },
   status_list: [
     {
       name: String,
