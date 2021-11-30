@@ -6,8 +6,10 @@ mongodb();
 require("./schema/users");
 require("./schema/teams");
 require("./schema/projects");
+require("./schema/boards");
 require("./schema/roles");
 require("./schema/permissions");
+require("./schema/configs");
 
 const conn = mongoose.connection;
 

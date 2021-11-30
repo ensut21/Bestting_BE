@@ -18,12 +18,6 @@ const {
 const { randomSixDigit } = require("../utils/common");
 
 describe("Feature project api", function () {
-  afterAll(async () => {
-    await Users.remove();
-    await Teams.remove();
-    await Permissions.remove();
-    await Projects.remove();
-  });
 
   describe("Get project by id /project/:projectId", function () {
     let owner, team, project;
@@ -93,6 +87,7 @@ describe("Feature project api", function () {
           expect(response.body.data.created_by.toString()).toEqual(
             owner._id.toString()
           );
+          expect(response.body.data.boards.length).toEqual(1);
         });
     });
 

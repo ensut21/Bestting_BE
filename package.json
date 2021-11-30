@@ -17,5 +17,8 @@
   "devDependencies": {
     "jest": "^27.2.5",
     "supertest": "^6.1.6"
+  },
+  "jest": {
+    "globalTeardown": "./tests/teardownJest.js"
   }
 }

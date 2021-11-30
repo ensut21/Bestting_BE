@@ -12,12 +12,6 @@ const { createTeam, addTeamMembers } = require("../services/team.service");
 const { randomSixDigit } = require("../utils/common");
 
 describe("Feature team api", function () {
-  afterAll(async () => {
-    await Users.remove();
-    await Teams.remove();
-    await Permissions.remove();
-  });
-
   describe("Get team by id /teams/:id", function () {
     let user;
     let team;
@@ -198,7 +192,6 @@ describe("Feature team api", function () {
         .expect("Content-Type", /json/)
         .expect(404)
         .then((response) => {
-          console.log(response.body)
           expect(response.body.errorMessage).toEqual("Team not found.");
         });
     });

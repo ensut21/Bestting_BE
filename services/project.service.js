@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
 const Teams = mongoose.model("Teams");
 const Projects = mongoose.model("Projects");
+const Boards = mongoose.model("Boards");
 const Roles = mongoose.model("Roles");
 const Permissions = mongoose.model("Permissions");
+const Configs = mongoose.model("Configs");
 
 const conn = require("../models");
 const { ErrorNotFound, ErrorForbidden } = require("../configs/errorMetods");
@@ -27,15 +29,40 @@ const methods = {
       try {
         session.startTransaction();
 
+        const boardDefault = await Configs.findOne({
+          prefix: "BOARD",
+          type: "DEFAULT",
+        }).session(session);
+
+
+        const statusList = boardDefault.value.map((t) => {
+          return {
+            ...t,
+          };
+        });
+
+        const board = new Boards({
+          name: boardDefault.prefix.toLowerCase(),
+          status_list: statusList,
+          created_by: user_id,
+        });
+
+        await board.save({ session });
+
         const project = new Projects({
           team_id,
           name,
           members: [user_id],
+          boards: [board._id],
           created_by: user_id,
         });
 
         await project.save({ session });
 
+        board.project_id = project._id;
+
+        await board.save({ session });
+        
         const team = await Teams.findOneAndUpdate(
           {
             _id: team_id,
